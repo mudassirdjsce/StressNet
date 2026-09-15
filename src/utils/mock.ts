@@ -1,5 +1,5 @@
-﻿// ─── StressNet Mock Data ─────────────────────────────────────────────────────
-// Single source of truth for all demo data.
+// ─── StressNet Mock Data ─────────────────────────────────────────────────────
+// Single source of truth for simulated dataset.
 // ALL data is synthetic / illustrative. Not real borrower records.
 
 export type RiskState = "Healthy" | "Watch" | "Stressed" | "Critical" | "Support";
@@ -165,7 +165,7 @@ export const simStages = [
     step: 1, day: "Day 0",
     label: "Asha — Stress Detected",
     borrower: "Asha",
-    desc: "SYNTHETIC BASELINE: Asha's income has declined for 2 months. Repayment 2 months overdue. Other members currently stable.",
+    desc: "BASELINE: Asha's income has declined for 2 months. Repayment 2 months overdue. Other members currently stable.",
     affected: ["G07-A1"],
     isHypothetical: false,
   },

@@ -166,12 +166,12 @@ export default function LoginScreen({ onLogin }: Props) {
               <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
               <path d="M7 11V7a5 5 0 0110 0v4" />
             </svg>
-            <span style={{ fontSize: 12, color: '#687588' }}>Secure institutional access · ISO 27001 compliant</span>
+            <span style={{ fontSize: 12, color: '#687588' }}>Secure institutional access • ISO 27001 compliant</span>
           </div>
 
           <div style={{ marginTop: 32, padding: '12px 16px', background: '#FEF3C7', border: '1px solid #FDE68A', borderRadius: 8 }}>
-            <div style={{ fontSize: 11, fontWeight: 600, color: '#92400E', marginBottom: 4 }}>DEMO PROTOTYPE</div>
-            <div style={{ fontSize: 12, color: '#B45309' }}>Click Sign In with any credentials to access the simulated platform. All data is illustrative.</div>
+            <div style={{ fontSize: 11, fontWeight: 600, color: '#92400E', marginBottom: 4 }}>SYSTEM ACCESS</div>
+            <div style={{ fontSize: 12, color: '#B45309' }}>Sign In with any credentials to enter the simulation. All data is illustrative.</div>
           </div>
         </div>
       </div>

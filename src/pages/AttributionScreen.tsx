@@ -1,31 +1,44 @@
-﻿import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import DonutChart from "../components/ui/DonutChart";
 import type { Screen, ScenarioKey } from "../utils/mock";
 import { scenarios } from "../utils/mock";
+import {
+  User,
+  CheckCircle2,
+  ShieldCheck,
+  AlertTriangle,
+  Link2,
+  Users,
+  TrendingUp,
+  AlertOctagon,
+  TrendingDown,
+  ArrowLeft,
+  ArrowRight,
+} from "lucide-react";
 
 interface Props {
   onNavigate: (s: Screen) => void;
 }
 
-const segmentsByScenario: Record<ScenarioKey, Array<{label: string; value: number; color: string}>> = {
+const segmentsByScenario: Record<ScenarioKey, Array<{ label: string; value: number; color: string }>> = {
   individual: [
     { label: "Individual", value: 74, color: "#0EA5E9" },
-    { label: "Network",    value: 14, color: "#6C63D9" },
-    { label: "External",  value: 12, color: "#F59E0B" },
+    { label: "Network", value: 14, color: "#6C63D9" },
+    { label: "External", value: 12, color: "#F59E0B" },
   ],
   network: [
-    { label: "Network",    value: 64, color: "#6C63D9" },
+    { label: "Network", value: 64, color: "#6C63D9" },
     { label: "Individual", value: 22, color: "#0EA5E9" },
-    { label: "External",  value: 14, color: "#F59E0B" },
+    { label: "External", value: 14, color: "#F59E0B" },
   ],
   external: [
-    { label: "External",  value: 74, color: "#F59E0B" },
-    { label: "Network",   value: 16, color: "#6C63D9" },
+    { label: "External", value: 74, color: "#F59E0B" },
+    { label: "Network", value: 16, color: "#6C63D9" },
     { label: "Individual", value: 10, color: "#0EA5E9" },
   ],
 };
 
-const panelsByScenario: Record<ScenarioKey, Array<{key: string; pct: number; color: string; bg: string; border: string; desc: string; detail: string; dominant?: boolean}>> = {
+const panelsByScenario: Record<ScenarioKey, Array<{ key: string; pct: number; color: string; bg: string; border: string; desc: string; detail: string; dominant?: boolean }>> = {
   individual: [
     {
       key: "Individual", pct: 74, dominant: true,
@@ -88,81 +101,137 @@ const panelsByScenario: Record<ScenarioKey, Array<{key: string; pct: number; col
   ],
 };
 
-const evidenceByScenario: Record<ScenarioKey, Array<{icon: string; label: string}>> = {
+const evidenceByScenario: Record<ScenarioKey, Array<{ icon: ReactNode; label: string }>> = {
   individual: [
-    { icon: "👤", label: "Asha — 2 months overdue, personal health expense (simulated)" },
-    { icon: "✅", label: "Meera — current on repayments; guarantee not triggered" },
-    { icon: "✅", label: "Kavita — current; group disbursement unaffected" },
-    { icon: "✅", label: "Farah — Zone 4 market stable; income unaffected" },
-    { icon: "🟢", label: "Lata — fully stable; domestic services income" },
+    { icon: <User size={15} color="#D84C4C" />, label: "Asha — 2 months overdue, personal health expense (simulated)" },
+    { icon: <CheckCircle2 size={15} color="#168568" />, label: "Meera — current on repayments; guarantee not triggered" },
+    { icon: <CheckCircle2 size={15} color="#168568" />, label: "Kavita — current; group disbursement unaffected" },
+    { icon: <CheckCircle2 size={15} color="#168568" />, label: "Farah — Zone 4 market stable; income unaffected" },
+    { icon: <ShieldCheck size={15} color="#168568" />, label: "Lata — fully stable; domestic services income" },
   ],
   network: [
-    { icon: "⚠",  label: "Asha — 2 months overdue; income severely declining" },
-    { icon: "🔗", label: "Meera — shared guarantee with Asha; 1 month overdue" },
-    { icon: "🔗", label: "Kavita — group lending; disbursement at risk" },
-    { icon: "📊", label: "Repayment co-movement: Asha + Meera + Kavita (simulated correlation: 0.71)" },
-    { icon: "🟢", label: "Lata — stable; income independent; no exposure to guarantee chain" },
+    { icon: <AlertTriangle size={15} color="#D84C4C" />, label: "Asha — 2 months overdue; income severely declining" },
+    { icon: <Link2 size={15} color="#D99A27" />, label: "Meera — shared guarantee with Asha; 1 month overdue" },
+    { icon: <Users size={15} color="#6C63D9" />, label: "Kavita — group lending; disbursement at risk" },
+    { icon: <TrendingUp size={15} color="#D84C4C" />, label: "Repayment co-movement: Asha + Meera + Kavita (simulated correlation: 0.71)" },
+    { icon: <ShieldCheck size={15} color="#168568" />, label: "Lata — stable; income independent; no exposure to guarantee chain" },
   ],
   external: [
-    { icon: "🌾", label: "Zone 4 market disruption — supply shock, Sep 2026" },
-    { icon: "💸", label: "Asha — Zone 4 seller; income down 40% (simulated)" },
-    { icon: "💸", label: "Farah — Zone 4 seller; income down 35% (simulated)" },
-    { icon: "✅", label: "Meera (tailoring), Kavita (garments) — different markets; unaffected" },
-    { icon: "🟢", label: "Lata (domestic services) — fully unaffected by market shock" },
+    { icon: <AlertOctagon size={15} color="#D99A27" />, label: "Zone 4 market disruption — supply shock, Sep 2026" },
+    { icon: <TrendingDown size={15} color="#D84C4C" />, label: "Asha — Zone 4 seller; income down 40% (simulated)" },
+    { icon: <TrendingDown size={15} color="#D84C4C" />, label: "Farah — Zone 4 seller; income down 35% (simulated)" },
+    { icon: <CheckCircle2 size={15} color="#168568" />, label: "Meera (tailoring), Kavita (garments) — different markets; unaffected" },
+    { icon: <ShieldCheck size={15} color="#168568" />, label: "Lata (domestic services) — fully unaffected by market shock" },
   ],
 };
 
 export default function AttributionScreen({ onNavigate }: Props) {
   const [activeScenario, setActiveScenario] = useState<ScenarioKey>("network");
-  const scenario  = scenarios.find(s => s.key === activeScenario)!;
-  const segments  = segmentsByScenario[activeScenario];
-  const panels    = panelsByScenario[activeScenario];
-  const evidence  = evidenceByScenario[activeScenario];
-  const dominant  = segments.reduce((a, b) => a.value > b.value ? a : b);
+  const scenario = scenarios.find(s => s.key === activeScenario)!;
+  const segments = segmentsByScenario[activeScenario];
+  const panels = panelsByScenario[activeScenario];
+  const evidence = evidenceByScenario[activeScenario];
+  const dominant = segments.reduce((a, b) => (a.value > b.value ? a : b));
 
   return (
     <div style={{ padding: "28px 32px", overflowY: "auto", flex: 1 }}>
       {/* Header */}
       <div style={{ marginBottom: 18 }}>
-        <h1 style={{ fontSize: 20, fontWeight: 700, color: "#182230", letterSpacing: "-0.02em", margin: 0 }}>Stress Attribution</h1>
+        <h1 style={{ fontSize: 20, fontWeight: 700, color: "#182230", letterSpacing: "-0.02em", margin: 0 }}>
+          Stress Attribution
+        </h1>
         <p style={{ fontSize: 13, color: "#687588", margin: "3px 0 0" }}>
-          Group G-07 · Distinguish isolated difficulty, network-caused vulnerability, and external shock. All values are simulated demonstration data.
+          Group G-07 • Distinguish isolated difficulty, network-caused vulnerability, and external shock. All values are simulated data.
         </p>
       </div>
 
       {/* Scenario selector */}
       <div style={{ display: "flex", gap: 8, marginBottom: 16 }}>
         {scenarios.map(sc => (
-          <button key={sc.key} onClick={() => setActiveScenario(sc.key)} style={{
-            padding: "7px 16px", borderRadius: 8, fontSize: 12, fontWeight: 600, cursor: "pointer",
-            border: `1.5px solid ${activeScenario === sc.key ? "#3157D5" : "#E3E8EF"}`,
-            background: activeScenario === sc.key ? "#EEF2FF" : "#FFFFFF",
-            color: activeScenario === sc.key ? "#3157D5" : "#687588",
-            transition: "all 0.15s",
-          }}>{sc.label}</button>
+          <button
+            key={sc.key}
+            onClick={() => setActiveScenario(sc.key)}
+            style={{
+              padding: "7px 16px",
+              borderRadius: 8,
+              fontSize: 12,
+              fontWeight: 600,
+              cursor: "pointer",
+              border: `1.5px solid ${activeScenario === sc.key ? "#3157D5" : "#E3E8EF"}`,
+              background: activeScenario === sc.key ? "#EEF2FF" : "#FFFFFF",
+              color: activeScenario === sc.key ? "#3157D5" : "#687588",
+              transition: "all 0.15s",
+            }}
+          >
+            {sc.label}
+          </button>
         ))}
       </div>
 
       {/* Context bar */}
-      <div style={{ background: "#FFFFFF", border: "1px solid #E3E8EF", borderRadius: 12, padding: "12px 20px", marginBottom: 16, display: "flex", alignItems: "center", gap: 12, justifyContent: "space-between" }}>
+      <div
+        style={{
+          background: "#FFFFFF",
+          border: "1px solid #E3E8EF",
+          borderRadius: 12,
+          padding: "12px 20px",
+          marginBottom: 16,
+          display: "flex",
+          alignItems: "center",
+          gap: 12,
+          justifyContent: "space-between",
+        }}
+      >
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
           <span style={{ fontSize: 13, color: "#687588" }}>Initiating borrower:</span>
           <span style={{ fontSize: 14, fontWeight: 700, color: "#182230" }}>{scenario.initiatorName}</span>
-          <span style={{ fontSize: 12, fontWeight: 600, color: "#6C63D9", background: "#EEF2FF", padding: "3px 10px", borderRadius: 6 }}>Group G-07</span>
-          <span style={{ fontSize: 13, fontWeight: 600, padding: "3px 10px", borderRadius: 99,
-            background: scenario.containment === "Contained" ? "#DCFCE7" : scenario.containment === "May Spread" ? "#FEF3C7" : "#FEE2E2",
-            color: scenario.containment === "Contained" ? "#168568" : scenario.containment === "May Spread" ? "#92400E" : "#991B1B",
-          }}>{scenario.containment}</span>
+          <span style={{ fontSize: 12, fontWeight: 600, color: "#6C63D9", background: "#EEF2FF", padding: "3px 10px", borderRadius: 6 }}>
+            Group G-07
+          </span>
+          <span
+            style={{
+              fontSize: 13,
+              fontWeight: 600,
+              padding: "3px 10px",
+              borderRadius: 99,
+              background: scenario.containment === "Contained" ? "#DCFCE7" : scenario.containment === "May Spread" ? "#FEF3C7" : "#FEE2E2",
+              color: scenario.containment === "Contained" ? "#168568" : scenario.containment === "May Spread" ? "#92400E" : "#991B1B",
+            }}
+          >
+            {scenario.containment}
+          </span>
         </div>
-        <span style={{ fontSize: 11, fontWeight: 600, color: "#687588", background: "#F1F5F9", padding: "3px 8px", borderRadius: 4, letterSpacing: "0.04em" }}>
+        <span
+          style={{
+            fontSize: 11,
+            fontWeight: 600,
+            color: "#687588",
+            background: "#F1F5F9",
+            padding: "3px 8px",
+            borderRadius: 4,
+            letterSpacing: "0.04em",
+          }}
+        >
           SIMULATED DATA
         </span>
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "260px 1fr", gap: 20, marginBottom: 20 }}>
         {/* Donut */}
-        <div style={{ background: "#FFFFFF", border: "1px solid #E3E8EF", borderRadius: 12, padding: "24px 20px", display: "flex", flexDirection: "column", alignItems: "center" }}>
-          <div style={{ fontSize: 13, fontWeight: 700, color: "#182230", marginBottom: 14, alignSelf: "flex-start" }}>Attribution Distribution</div>
+        <div
+          style={{
+            background: "#FFFFFF",
+            border: "1px solid #E3E8EF",
+            borderRadius: 12,
+            padding: "24px 20px",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <div style={{ fontSize: 13, fontWeight: 700, color: "#182230", marginBottom: 14, alignSelf: "flex-start" }}>
+            Attribution Distribution
+          </div>
           <DonutChart segments={segments} size={180} innerRadius={56} centerLabel={`${dominant.value}%`} centerSub={dominant.label} />
           <div style={{ marginTop: 18, width: "100%", display: "flex", flexDirection: "column", gap: 8 }}>
             {segments.map(s => (
@@ -173,27 +242,59 @@ export default function AttributionScreen({ onNavigate }: Props) {
               </div>
             ))}
           </div>
-          <div style={{ marginTop: 14, padding: "8px 10px", background: "#F8FAFC", borderRadius: 7, width: "100%", fontSize: 11, color: "#687588", fontStyle: "italic" }}>
-            Illustrative values — not validated probabilities
+          <div
+            style={{
+              marginTop: 14,
+              padding: "8px 10px",
+              background: "#F8FAFC",
+              borderRadius: 7,
+              width: "100%",
+              fontSize: 11,
+              color: "#687588",
+              fontStyle: "italic",
+            }}
+          >
+            Illustrative values • not validated probabilities
           </div>
         </div>
 
         {/* Attribution panels */}
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
           {panels.map(p => (
-            <div key={p.key} style={{
-              background: p.bg, border: `1.5px solid ${p.dominant ? p.color + "80" : p.border}`,
-              borderRadius: 12, padding: "14px 18px", position: "relative",
-            }}>
+            <div
+              key={p.key}
+              style={{
+                background: p.bg,
+                border: `1.5px solid ${p.dominant ? p.color + "80" : p.border}`,
+                borderRadius: 12,
+                padding: "14px 18px",
+                position: "relative",
+              }}
+            >
               {p.dominant && (
-                <div style={{ position: "absolute", top: 12, right: 12, fontSize: 10, fontWeight: 700, letterSpacing: "0.06em", background: p.color, color: "white", padding: "2px 8px", borderRadius: 99 }}>
+                <div
+                  style={{
+                    position: "absolute",
+                    top: 12,
+                    right: 12,
+                    fontSize: 10,
+                    fontWeight: 700,
+                    letterSpacing: "0.06em",
+                    background: p.color,
+                    color: "white",
+                    padding: "2px 8px",
+                    borderRadius: 99,
+                  }}
+                >
                   DOMINANT
                 </div>
               )}
               <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
                 <div>
                   <div style={{ fontSize: 13, fontWeight: 700, color: "#182230" }}>{p.key}</div>
-                  <div style={{ fontSize: 20, fontWeight: 800, color: p.color, lineHeight: 1, letterSpacing: "-0.02em" }}>{p.pct}%</div>
+                  <div style={{ fontSize: 20, fontWeight: 800, color: p.color, lineHeight: 1, letterSpacing: "-0.02em" }}>
+                    {p.pct}%
+                  </div>
                 </div>
                 <div style={{ flex: 1, marginLeft: 8 }}>
                   <div style={{ height: 7, background: "rgba(255,255,255,0.6)", borderRadius: 99 }}>
@@ -212,10 +313,35 @@ export default function AttributionScreen({ onNavigate }: Props) {
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
         <div style={{ background: "#FFFFFF", border: "1px solid #E3E8EF", borderRadius: 12, padding: "20px" }}>
           <div style={{ fontSize: 13, fontWeight: 700, color: "#182230", marginBottom: 4 }}>Evidence Indicators</div>
-          <div style={{ fontSize: 11, color: "#687588", marginBottom: 14 }}>Illustrative signals for this scenario — Simulated data</div>
-          {evidence.map(e => (
-            <div key={e.label} style={{ display: "flex", gap: 12, padding: "9px 12px", background: "#F8FAFC", borderRadius: 8, alignItems: "flex-start", marginBottom: 8 }}>
-              <span style={{ fontSize: 15, flexShrink: 0 }}>{e.icon}</span>
+          <div style={{ fontSize: 11, color: "#687588", marginBottom: 14 }}>Illustrative signals for this scenario • Simulated data</div>
+          {evidence.map((e, idx) => (
+            <div
+              key={idx}
+              style={{
+                display: "flex",
+                gap: 12,
+                padding: "9px 12px",
+                background: "#F8FAFC",
+                borderRadius: 8,
+                alignItems: "center",
+                marginBottom: 8,
+              }}
+            >
+              <div
+                style={{
+                  width: 28,
+                  height: 28,
+                  borderRadius: 6,
+                  background: "#FFFFFF",
+                  border: "1px solid #E3E8EF",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  flexShrink: 0,
+                }}
+              >
+                {e.icon}
+              </div>
               <span style={{ fontSize: 12, color: "#182230", lineHeight: 1.4 }}>{e.label}</span>
             </div>
           ))}
@@ -236,15 +362,49 @@ export default function AttributionScreen({ onNavigate }: Props) {
           <div style={{ padding: "10px 12px", background: "#FEF3C7", borderRadius: 8, border: "1px solid #FDE68A", marginBottom: 12 }}>
             <div style={{ fontSize: 11, fontWeight: 700, color: "#92400E", marginBottom: 3 }}>Disclaimer</div>
             <div style={{ fontSize: 12, color: "#B45309", lineHeight: 1.5 }}>
-              All values are synthetic demonstration data. This is a conceptual framework — not validated financial analysis or proven prediction.
+              This is a conceptual framework for stress attribution analysis. Not validated financial analysis or proven prediction.
             </div>
           </div>
           <div style={{ display: "flex", gap: 8 }}>
-            <button onClick={() => onNavigate("network")} style={{ flex: 1, padding: "9px 0", background: "#F5F7FA", color: "#3157D5", border: "1px solid #E3E8EF", borderRadius: 8, fontSize: 12, fontWeight: 600, cursor: "pointer" }}>
-              ← Investigation
+            <button
+              onClick={() => onNavigate("network")}
+              style={{
+                flex: 1,
+                padding: "9px 0",
+                background: "#F5F7FA",
+                color: "#3157D5",
+                border: "1px solid #E3E8EF",
+                borderRadius: 8,
+                fontSize: 12,
+                fontWeight: 600,
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 6,
+              }}
+            >
+              <ArrowLeft size={13} /> Investigation
             </button>
-            <button onClick={() => onNavigate("intervention")} style={{ flex: 1, padding: "9px 0", background: "#3157D5", color: "#FFFFFF", border: "none", borderRadius: 8, fontSize: 12, fontWeight: 600, cursor: "pointer" }}>
-              Intervention →
+            <button
+              onClick={() => onNavigate("intervention")}
+              style={{
+                flex: 1,
+                padding: "9px 0",
+                background: "#3157D5",
+                color: "#FFFFFF",
+                border: "none",
+                borderRadius: 8,
+                fontSize: 12,
+                fontWeight: 600,
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 6,
+              }}
+            >
+              Intervention <ArrowRight size={13} />
             </button>
           </div>
         </div>

@@ -1,8 +1,8 @@
-﻿import { useState } from 'react';
+import { useState } from 'react';
 import { borrowers } from '../utils/mock';
 import type { Screen } from '../utils/mock';
-
 import type { PassportEvent } from '../App';
+import { FileBadge, Check, X, Loader2, CheckCircle2, Shield, Lock } from 'lucide-react';
 
 interface Props {
   onNavigate: (s: Screen) => void;
@@ -35,7 +35,7 @@ const outcomeBackground: Record<string, string> = {
   Active: '#FEE2E2',
 };
 
-export default function PassportScreen({ onNavigate, passportEvents }: Props) {
+export default function PassportScreen({ onNavigate: _onNavigate, passportEvents }: Props) {
   const [verifying, setVerifying] = useState(false);
   const [verified, setVerified] = useState(false);
   const borrower = borrowers.find(b => b.id === 'G07-A1')!;
@@ -52,8 +52,12 @@ export default function PassportScreen({ onNavigate, passportEvents }: Props) {
     <div style={{ padding: '28px 32px', overflowY: 'auto', flex: 1 }}>
       {/* Header */}
       <div style={{ marginBottom: 24 }}>
-        <h1 style={{ fontSize: 20, fontWeight: 700, color: '#182230', letterSpacing: '-0.02em', margin: 0 }}>Conceptual Stress Passport</h1>
-        <p style={{ fontSize: 13, color: '#687588', margin: '3px 0 0' }}>Conceptual Stress Passport — Prototype. Synthetic event records for Group G-07. Not a real blockchain, wallet, or cross-lender system.</p>
+        <h1 style={{ fontSize: 20, fontWeight: 700, color: '#182230', letterSpacing: '-0.02em', margin: 0 }}>
+          Conceptual Stress Passport
+        </h1>
+        <p style={{ fontSize: 13, color: '#687588', margin: '3px 0 0' }}>
+          Portable stress record for Group G-07. Tracks verified events, interventions, and recovery outcomes.
+        </p>
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: '340px 1fr', gap: 20 }}>
@@ -80,9 +84,7 @@ export default function PassportScreen({ onNavigate, passportEvents }: Props) {
                   <div style={{ fontSize: 22, fontWeight: 800, letterSpacing: '-0.02em' }}>B04</div>
                 </div>
                 <div style={{ width: 36, height: 36, borderRadius: 9, background: '#3157D5', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                  </svg>
+                  <Lock size={18} color="white" />
                 </div>
               </div>
 
@@ -106,7 +108,7 @@ export default function PassportScreen({ onNavigate, passportEvents }: Props) {
 
               <div style={{ marginTop: 16, padding: '8px 12px', background: 'rgba(255,255,255,0.07)', borderRadius: 7, display: 'flex', alignItems: 'center', gap: 8 }}>
                 <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#168568', flexShrink: 0 }} />
-                <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.7)' }}>Tamper-evident record Â· Privacy-preserving</span>
+                <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.7)' }}>Tamper-evident record • Privacy-preserving</span>
               </div>
             </div>
           </div>
@@ -139,10 +141,9 @@ export default function PassportScreen({ onNavigate, passportEvents }: Props) {
                       width: 18, height: 18, borderRadius: '50%',
                       background: c.status ? '#DCFCE7' : '#FEE2E2',
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      fontSize: 10, fontWeight: 700,
                       color: c.status ? '#168568' : '#D84C4C',
                     }}>
-                      {c.status ? 'âœ“' : 'âœ•'}
+                      {c.status ? <Check size={11} strokeWidth={3} /> : <X size={11} strokeWidth={3} />}
                     </div>
                     <span style={{ fontSize: 12, fontWeight: 600, color: c.status ? '#168568' : '#D84C4C' }}>
                       {c.status ? 'Yes' : 'No'}
@@ -154,7 +155,9 @@ export default function PassportScreen({ onNavigate, passportEvents }: Props) {
 
             {verified ? (
               <div className="animate-fade-in" style={{ background: '#DCFCE7', border: '1px solid #BBF7D0', borderRadius: 8, padding: '12px 14px' }}>
-                <div style={{ fontSize: 12, fontWeight: 700, color: '#168568', marginBottom: 4 }}>Verification Complete</div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, fontWeight: 700, color: '#168568', marginBottom: 4 }}>
+                  <CheckCircle2 size={15} /> Verification Complete
+                </div>
                 <div style={{ fontSize: 12, color: '#166534', lineHeight: 1.5 }}>
                   Simulated check complete. This is a conceptual prototype record — not a blockchain transaction, cryptographic signature, or real verification.
                 </div>
@@ -168,9 +171,14 @@ export default function PassportScreen({ onNavigate, passportEvents }: Props) {
                   background: verifying ? '#F1F5F9' : '#3157D5',
                   color: verifying ? '#687588' : '#FFFFFF',
                   transition: 'background 0.15s',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: 8,
                 }}
               >
-                {verifying ? 'âŸ³ Verifying passportâ€¦' : 'Verify Passport'}
+                {verifying && <Loader2 size={14} className="animate-spin" />}
+                {verifying ? 'Verifying passport...' : 'Verify Passport'}
               </button>
             )}
           </div>
@@ -181,7 +189,9 @@ export default function PassportScreen({ onNavigate, passportEvents }: Props) {
           {/* Event timeline */}
           <div style={{ background: '#FFFFFF', border: '1px solid #E3E8EF', borderRadius: 12, padding: '20px', flex: 1 }}>
             <div style={{ fontSize: 13, fontWeight: 700, color: '#182230', marginBottom: 4 }}>Verified Event History</div>
-            <div style={{ fontSize: 11, color: '#687588', marginBottom: 20 }}>Synthetic record of stress events and interventions Â· Illustrative simulation</div>
+            <div style={{ fontSize: 11, color: '#687588', marginBottom: 20 }}>
+              Record of stress events and interventions
+            </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
               {passportEvents.map((ev, i) => (
@@ -243,9 +253,7 @@ export default function PassportScreen({ onNavigate, passportEvents }: Props) {
 
                       {/* Integrity indicator */}
                       <div style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '6px 10px', background: '#FFFFFF', borderRadius: 6, border: '1px solid #E3E8EF' }}>
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#168568" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                          <polyline points="20 6 9 17 4 12" />
-                        </svg>
+                        <CheckCircle2 size={13} color="#168568" />
                         <span style={{ fontSize: 11, color: '#168568', fontWeight: 600 }}>Record integrity verified</span>
                         <span style={{ fontSize: 11, color: '#687588', marginLeft: 'auto' }}>Simulated ledger entry</span>
                       </div>
@@ -260,9 +268,7 @@ export default function PassportScreen({ onNavigate, passportEvents }: Props) {
           <div style={{ background: '#FFFFFF', border: '1px solid #E3E8EF', borderRadius: 12, padding: '20px' }}>
             <div style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
               <div style={{ width: 36, height: 36, borderRadius: 9, background: '#EEF2FF', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3157D5" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                </svg>
+                <Shield size={18} color="#3157D5" />
               </div>
               <div>
                 <div style={{ fontSize: 13, fontWeight: 700, color: '#182230', marginBottom: 6 }}>Privacy Notice</div>
@@ -270,8 +276,10 @@ export default function PassportScreen({ onNavigate, passportEvents }: Props) {
                   Raw financial data is not displayed in this passport. The prototype illustrates a tamper-evident record of verified events and interventions. In a production system, cryptographic commitments would enable cross-lender trust without exposing underlying financial details.
                 </p>
                 <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: '#F1F5F9', padding: '4px 10px', borderRadius: 6 }}>
-                  <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#3157D5' }} />
-                  <span style={{ fontSize: 11, color: '#687588', fontWeight: 500 }}>Conceptual prototype Â· Not a production blockchain system</span>
+                  <FileBadge size={13} color="#3157D5" />
+                  <span style={{ fontSize: 11, color: '#687588', fontWeight: 500 }}>
+                    Conceptual prototype • Not a production blockchain system
+                  </span>
                 </div>
               </div>
             </div>
@@ -281,6 +289,3 @@ export default function PassportScreen({ onNavigate, passportEvents }: Props) {
     </div>
   );
 }
-
-
-

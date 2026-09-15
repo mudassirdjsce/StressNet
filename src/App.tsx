@@ -1,4 +1,4 @@
-﻿import { useState } from "react";
+import { useState } from "react";
 import type { Screen } from "./utils/mock";
 import { passportEvents as initialPassportEvents } from "./utils/mock";
 import Sidebar from "./components/layout/Sidebar";
@@ -10,6 +10,8 @@ import AttributionScreen from "./pages/AttributionScreen";
 import ImmuneMemoryScreen from "./pages/ImmuneMemoryScreen";
 import InterventionScreen from "./pages/InterventionScreen";
 import PassportScreen from "./pages/PassportScreen";
+import InstitutionModal from "./components/ui/InstitutionModal";
+import SettingsModal from "./components/ui/SettingsModal";
 
 export interface PassportEvent {
   year: string;
@@ -28,6 +30,8 @@ export default function App() {
   const [passportEvents, setPassportEvents] = useState<PassportEvent[]>(initialPassportEvents);
   const [interventionDone, setInterventionDone] = useState(false);
   const [caseStatuses, setCaseStatuses] = useState<Record<string, string>>({});
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
   const navigate = (s: Screen) => setScreen(s);
 
@@ -55,11 +59,13 @@ export default function App() {
     setPassportEvents(prev => [...prev, newEvent]);
   };
 
-  const handleResetDemo = () => {
+  const handleResetSession = () => {
     setScreen("login");
     setPassportEvents(initialPassportEvents);
     setInterventionDone(false);
     setCaseStatuses({});
+    setIsProfileOpen(false);
+    setIsSettingsOpen(false);
   };
 
   if (screen === "login") {
@@ -68,10 +74,20 @@ export default function App() {
 
   return (
     <div style={{ display: "flex", height: "100vh", overflow: "hidden", background: "#F5F7FA" }}>
-      <Sidebar current={screen} onNavigate={navigate} onSignOut={handleResetDemo} />
+      <Sidebar
+        current={screen}
+        onNavigate={navigate}
+        onSignOut={handleResetSession}
+        onOpenProfile={() => setIsProfileOpen(true)}
+        onOpenSettings={() => setIsSettingsOpen(true)}
+      />
 
       <div style={{ flex: 1, display: "flex", flexDirection: "column", overflow: "hidden" }}>
-        <TopNav onResetDemo={handleResetDemo} interventionDone={interventionDone} />
+        <TopNav
+          onResetSession={handleResetSession}
+          interventionDone={interventionDone}
+          onOpenProfile={() => setIsProfileOpen(true)}
+        />
         <main style={{ flex: 1, overflowY: "auto", display: "flex", flexDirection: "column", minHeight: 0 }}>
           {screen === "dashboard" && <DashboardScreen onNavigate={navigate} interventionDone={interventionDone} />}
           {screen === "network" && <NetworkScreen onNavigate={navigate} />}
@@ -90,6 +106,10 @@ export default function App() {
           )}
         </main>
       </div>
+
+      {/* Modals */}
+      <InstitutionModal isOpen={isProfileOpen} onClose={() => setIsProfileOpen(false)} />
+      <SettingsModal isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} />
     </div>
   );
 }
