@@ -197,44 +197,9 @@ export default function DashboardScreen({ onNavigate, interventionDone }: Props)
               onSelect={() => onNavigate("network")}
               simStep={0}
               compact={true}
+              onInvestigate={() => onNavigate("network")}
             />
           </div>
-
-          {/* Floating Investigate Action Button */}
-          <button
-            onClick={() => onNavigate("network")}
-            style={{
-              position: "absolute",
-              bottom: 18,
-              right: 20,
-              fontSize: 11,
-              fontWeight: 600,
-              color: "#94A3B8",
-              background: "rgba(15, 23, 42, 0.8)",
-              border: "1px solid rgba(255, 255, 255, 0.12)",
-              backdropFilter: "blur(8px)",
-              borderRadius: 6,
-              padding: "7px 14px",
-              cursor: "pointer",
-              display: "flex",
-              alignItems: "center",
-              gap: 6,
-              transition: "all 0.15s",
-              zIndex: 5,
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.color = "#FFFFFF";
-              e.currentTarget.style.background = "rgba(49, 87, 213, 0.4)";
-              e.currentTarget.style.borderColor = "rgba(96, 165, 250, 0.5)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.color = "#94A3B8";
-              e.currentTarget.style.background = "rgba(15, 23, 42, 0.8)";
-              e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.12)";
-            }}
-          >
-            Investigate Network <ArrowRight size={13} />
-          </button>
         </div>
 
         {/* ── Right Column ─────────────────────────────────── */}
