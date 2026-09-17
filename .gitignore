@@ -19,3 +19,8 @@ logs/
 # beside it.
 /.plugins/
 /.opencode-skills/
+
+# Internal planning documents
+implementation.md
+decision-plan.md
+*PS_FIRST_FINAL.md
